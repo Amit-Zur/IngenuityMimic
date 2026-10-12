@@ -1,6 +1,10 @@
-include <cstdint>
+#pragma once // Include guard for this header file 
+#include <cstdint>
+#include <Adafruit_BME320_Library>
 
 // Need to read about a case of power shutdown mid writing and how to counter it
+
+static Adafruit_BME280 weatherSensor; // Global private weather object 
 
 struct timeStampEntry
 {
