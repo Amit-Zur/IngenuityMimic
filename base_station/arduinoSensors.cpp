@@ -6,19 +6,28 @@
 
 bool weatherSensorStart()
 {
-    return weatherSensor.begin(0x76); // SDO pin connected to GND -> 0x76 / VCC -> 0x77
+    return weatherSensor.begin(BME280_I2C_ADDRESS); // SDO pin connected to GND -> 0x76 / VCC -> 0x77
+}
+
+bool timeClockStart();
+{
+    Wire.begin(); // Initalize I2C communication with the board 
+
+    Wire.beginTransmission(RTC_I2C_ADDRESS); 
+    if(Wire.endTransmission() != 0) return false; // Checks if the communication was successfully established 
 }
 
 weatherEntry weatherRead()
 {
-    weatherEntry currObject;
+    weatherEntry currWeatherObject;
+    timeStampEntry currTimeObject;
 
-    currObject.hPa = weatherSensor.readPressure();
-    currObject.tempCelsius = weatherSensor.readTemperature();
-    currObject.humidity = weatherSensor.readHumidity();
-    // currObject.currentTime.seconds TODO
-    // currObject.currentTime.timeBase TODO
-    // currObject.currentTime.timeContext TODO
+    currWeatherObject.hPa = weatherSensor.readPressure();
+    currWeatherObject.tempCelsius = weatherSensor.readTemperature();
+    currWeatherObject.humidity = weatherSensor.readHumidity();
+    // currTimeObject.currentTime.seconds = 
+    // currTimeObject.currentTime.timeBase 
+    // currTimeObject.currentTime.timeContext 
 
     return currObject;
 }
