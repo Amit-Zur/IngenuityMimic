@@ -11,6 +11,8 @@ constexpr uint8_t RTC_I2C_ADDRESS = 0x68; // GND address
 
 
 static Adafruit_BME280 weatherSensor; // Global private weather object 
+static DS3231-RTC realTimeClock; // Global private rtc object
+static bool realTimeClockFlag = false;
 
 struct timeStampEntry
 {

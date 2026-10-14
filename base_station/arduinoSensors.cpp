@@ -14,7 +14,8 @@ bool timeClockStart();
     Wire.begin(); // Initalize I2C communication with the board 
 
     Wire.beginTransmission(RTC_I2C_ADDRESS); 
-    if(Wire.endTransmission() != 0) return false; // Checks if the communication was successfully established 
+    if(Wire.endTransmission() != false) return false; // Checks if the communication was successfully established 
+    if(realTimeClock.oscillatorCheck() == false) return false // Checks if the oscillator is running 
 }
 
 weatherEntry weatherRead()
