@@ -2,7 +2,7 @@
 // Implement constructor for the timeStampEntry & weatherEntry 
 // *** Should check the delay between writing a timestampEntry and than adding it to the weatherEntry
 
-#include <arduinoSensors.h>
+#include "arduinoSensors.h"
 
 bool weatherSensorStart()
 {
@@ -16,6 +16,9 @@ bool timeClockStart();
     Wire.beginTransmission(RTC_I2C_ADDRESS); 
     if(Wire.endTransmission() != false) return false; // Checks if the communication was successfully established 
     if(realTimeClock.oscillatorCheck() == false) return false // Checks if the oscillator is running 
+
+    realTimeClockFlag = true;
+    return true;
 }
 
 weatherEntry weatherRead()

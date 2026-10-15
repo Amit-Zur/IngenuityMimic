@@ -12,4 +12,8 @@ struct marsClockObject
     uint8_t marsHour;
 };
 
+/*
+ *  @brief Converts current earth time that was read by the RTC moudle / arduino board to equivalent mars time
+ *  @returns marsClockObject with the current equivalent mars time 
+*/
 marsClockObject earthTimeToMarsFunct(uint32_t earthSeconds); // Function input is a placeholder for now till I figure out my time struct correctly)
