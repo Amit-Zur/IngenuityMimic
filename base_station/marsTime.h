@@ -1,8 +1,15 @@
-#include <cstdint>
+#pragma once
+#include <stdint.h>
 
-static uint32_t marsSol;
-static uint32_t marsTimeCalcX;
-static uint32_t marsTimeCalcY;
-static uint32_t marsTimeSeconds;
+static constexpr int SECONDS_IN_HOUR = 3600;
+static constexpr int SECONDS_IN_MINUTE = 60;
 
-constexpr uint8_t firstMarsSol = 0;
+struct marsClockObject
+{
+    uint32_t marsSol;
+    uint8_t marsSecond;
+    uint8_t marsMinute;
+    uint8_t marsHour;
+};
+
+marsClockObject earthTimeToMarsFunct(uint32_t earthSeconds); // Function input is a placeholder for now till I figure out my time struct correctly)
