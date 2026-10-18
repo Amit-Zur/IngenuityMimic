@@ -21,3 +21,16 @@ bool memoryCardInit(SdSpiCard& memoryCard)
 
     return true;
 }
+
+bool encodeCardSector(uint8_t* sectorBuffer,uint32_t currSectorNum, const uint8_t* dataPacket, uint16_t dataPacketLen)
+{
+    std::memset(sectorBuffer, 0xFF, CARD_SECTOR_SIZE); // Cleans the sector buffer
+
+    // Decide which header files I want to use in order to catgeroize the data that will be written in the sector
+
+    std::memcpy(&sectorBuffer[DATA_PACKET_OFFSET], dataPacket, dataPacketLen); // Copy data into the sector buffer 
+
+    // Read about Cyclic Redundancy Check and hopefully implement it correctly here.
+
+    return true;
+}
