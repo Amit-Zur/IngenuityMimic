@@ -14,6 +14,8 @@ This project will mimic several of the stationary Ingenuity features:
 
 ## Hardware used in the project
 - Arduino UNO R3
+- DS3231 RTC MOUDLE
+- BMP280 SENSOR
 
 ## Current schematics 
 * Other components are used in the schematic
