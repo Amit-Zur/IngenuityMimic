@@ -15,5 +15,9 @@ This project will mimic several of the stationary Ingenuity features:
 ## Hardware used in the project
 - Arduino UNO R3
 
+## Current schematics 
+* Other components are used in the schematic
+<img width="750" height="474" alt="image" src="https://github.com/user-attachments/assets/19aaf028-b28b-4dde-8c17-4213f696efb8" />
+
 
 TBD
