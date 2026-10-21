@@ -2,7 +2,7 @@
 
 bool device_connected_check(uint8_t device_address)
 {
-    Wire.beginTransmission(device_address)
+    Wire.beginTransmission(device_address);
     return Wire.endTransmission() == 0;
 }
 
@@ -28,10 +28,10 @@ bool I2C_bus_test()
     Serial.print(device_counter);
     Serial.println(F(" devices found connected to the board."));
 
-    Serial.println(ds3231_found ? F("PASS: DS3231 FOUND AT ADDRESS 0x68")
-                                : F("FAILED: DS3231 NOT FOUND AT ADDRESS 0x68"));
-    Serial.println(bmp280_found ? F("PASS: BMP280 FOUND AT ADDRESS 0x76")
-                                : F("FAILED: BMP280 NOT FOUND AT ADDRESS 0x78"));
+    Serial.println(ds3231_found ? F("PASS: DEVICE FOUND AT ADDRESS 0x68")
+                                : F("FAILED: DEVICE NOT FOUND AT ADDRESS 0x68"));
+    Serial.println(bmp280_found ? F("PASS: DEVICE FOUND AT ADDRESS 0x76")
+                                : F("FAILED: DEVICE NOT FOUND AT ADDRESS 0x76"));
 
     return ds3231_found && bmp280_found;
 }
