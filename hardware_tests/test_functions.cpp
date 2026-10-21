@@ -4,34 +4,55 @@ bool device_connected_check(uint8_t device_address)
 {
     Wire.beginTransmission(device_address);
     return Wire.endTransmission() == 0;
-}
+} // end of device_connected_check function
+
+static uint8_t primary_or_secondary_address(const board_component& current)
+{
+    if(device_connected_check(current.primary_address)) return current.primary_address;
+    if(current.secondary_address && device_connected_check(current.secondary_address)) return current.secondary_address;
+
+    return 0;
+} // end of primary_or_secondary_address function
 
 bool I2C_bus_test()
 {
-    uint8_t device_counter = 0;
-    uint8_t device_address = 0;
-    bool ds3231_found = device_connected_check(DS3231_ADDRESS);
-    bool bmp280_found = device_connected_check(BMP280_ADDRESS);
+    bool device_test_status = true;
 
-    Serial.println(F("--- I2C SCAN BEGINS ---"));
+    Serial.println(F("--- I2C CHECK BEGINS ---"));
 
-    for(device_address; device_address < ADDRESS_LIMIT; device_address++)
+    for(uint8_t device_counter = 0; device_counter < DEVICE_AMOUNT; device_counter++)
     {
-        if(device_connected_check(device_address))
+        const board_component& current_device = CONNECTED_DEVICES[device_counter];
+        uint8_t current_device_address = primary_or_secondary_address(current_device);
+
+        if(current_device_address)
         {
-            Serial.print(F("Found a device connected to the board at address: 0x"));
-            Serial.println(device_address, HEX);
-            device_counter++;
+            Serial.print(F("PASS: "));
+            Serial.print(current_device.component_name);
+            Serial.print(F(" found at address: 0x"));
+            Serial.println(current_device_address, HEX);
+        }
+        else
+        {
+            Serial.print(F("FAILED: "));
+            Serial.print(current_device.component_name);
+            Serial.print(F(" not found at address: 0x"));
+            Serial.print(current_device.primary_address, HEX);
+            if(current_device.secondary_address)
+            {
+                Serial.print(F(" or at address: 0x"));
+                Serial.println(current_device.secondary_address, HEX);
+            }
+            Serial.println();
+            device_test_status = false;
         }
     }
     
-    Serial.print(device_counter);
-    Serial.println(F(" devices found connected to the board."));
+    return device_test_status;
+} // end of I2C_bus_test function
 
-    Serial.println(ds3231_found ? F("PASS: DEVICE FOUND AT ADDRESS 0x68")
-                                : F("FAILED: DEVICE NOT FOUND AT ADDRESS 0x68"));
-    Serial.println(bmp280_found ? F("PASS: DEVICE FOUND AT ADDRESS 0x76")
-                                : F("FAILED: DEVICE NOT FOUND AT ADDRESS 0x76"));
 
-    return ds3231_found && bmp280_found;
+bool device_ID_test()
+{
+
 }
