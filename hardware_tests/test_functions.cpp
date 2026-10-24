@@ -6,6 +6,12 @@ bool device_connected_check(uint8_t device_address)
     return Wire.endTransmission() == 0;
 } // end of device_connected_check function
 
+/*
+ *  @brief finds out which address a component is using
+ *         because some components can be set to primary or secondary addresses
+ *  @param current the component the function is looking for
+ *  @returns the address that responded, else returns 0
+*/ 
 static uint8_t primary_or_secondary_address(const board_component& current)
 {
     if(device_connected_check(current.primary_address)) return current.primary_address;
@@ -51,8 +57,9 @@ bool I2C_bus_test()
     return device_test_status;
 } // end of I2C_bus_test function
 
-
-bool device_ID_test()
-{
+/*
+bool device_ID_test() // Redundant test will not write it for now.
+                      //  Might be used later for an edge case where BMP280 is connected isntead of BME 280
 
 }
+*/
