@@ -28,20 +28,15 @@ const uint8_t DEVICE_AMOUNT = sizeof(CONNECTED_DEVICES) / sizeof(CONNECTED_DEVIC
 
 
 /*
- *  @brief Checks if a given address is actually connected to the board
- *  @returns true if it is, else false
-*/
+ *  @brief Checks if a device acknowledges the given I2C address
+ *  @param device_address 7 bit long I2C address
+ *  @returns true if device responded, false otherwise
+ *  @note function cannot be used before calling "Wire.begin()"
+*/ 
 bool device_connected_check(uint8_t device_address);
 
 /*
- *  @brief An helper function that check which address the device is using
- *         Some devices might use multiple address
- *  @returns the address that the device is using
-*/
-static uint8_t primary_or_secondary_address(board_component& current);
-
-/*
- *  @brief A connectivity I2C test function that checks the components of the board
- *  @returns true if everything is connected correctly, else false
+ *  @brief connectivity test for every board component in the connected devices table
+ *  @returns true if all components were found, false otherwise
 */
 bool I2C_bus_test()
