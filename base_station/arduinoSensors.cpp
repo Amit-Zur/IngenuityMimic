@@ -4,34 +4,65 @@
 
 #include "arduinoSensors.h"
 
+static Adafruit_BME280 weatherSensor; 
+static DS3231 realTimeClock; 
+static bool realTimeClockFlag = false;
+
 bool weatherSensorStart()
 {
-    return weatherSensor.begin(BME280_I2C_ADDRESS); // SDO pin connected to GND -> 0x76 / VCC -> 0x77
+    if(!weatherSensor.begin(BME280_I2C_ADDRESS)) return false; 
+    // Future error handling of sensor not working?
+
+    weatherSensor.setSampling(Adafruit_BME280::MODE_FORCED, // Takes temperature reading only when called
+                              Adafruit_BME280::SAMPLING_X1, // Temperature reading
+                              Adafruit_BME280::SAMPLING_X1, // Pressure reading
+                              Adafruit_BME280::SAMPLING_X1, // Humidity reading
+                              Adafruit_BME280::FILTER_OFF); // Turns filter off, because it's not relevant in this type of reading
+    return true;
 }
 
-bool timeClockStart();
+bool timeClockStart()
 {
-    Wire.begin(); // Initalize I2C communication with the board 
-
     Wire.beginTransmission(RTC_I2C_ADDRESS); 
-    if(Wire.endTransmission() != false) return false; // Checks if the communication was successfully established 
-    if(realTimeClock.oscillatorCheck() == false) return false // Checks if the oscillator is running 
+    // Checks if the communication was successfully established 
+    if(Wire.endTransmission() != 0) return false; 
+    // Checks if the oscillator is running, else time stamp is unreliable
+    if(realTimeClock.oscillatorCheck() == false) return false; 
 
     realTimeClockFlag = true;
     return true;
 }
 
+bool sensorStartWrap()
+{
+    Wire.begin();
+    bool bme280_sensor = weatherSensorStart();
+    bool ds3231_rtc = timeClockStart();
+
+    return bme280_sensor && ds3231_rtc;
+}
+
 weatherEntry weatherRead()
 {
     weatherEntry currWeatherObject;
-    timeStampEntry currTimeObject;
 
-    currWeatherObject.hPa = weatherSensor.readPressure();
-    currWeatherObject.tempCelsius = weatherSensor.readTemperature();
+    if(realTimeClockFlag == true)
+    {
+        currWeatherObject.currentTime.seconds = RTClib::now().unixtime();
+    }
+    else
+    {
+        currWeatherObject.currentTime.seconds = millis() / MILLI_SECOND_PER_SECOND;
+    }
+
+    weatherSensor.takeForcedMeasurement();
+
+    currWeatherObject.hPa = weatherSensor.readPressure() / PASCAL_PER_DECI_HPA;
+    currWeatherObject.tempCelsius = weatherSensor.readTemperature() * TEMP_UNITS_PER_ONE_CELSIUS;
     currWeatherObject.humidity = weatherSensor.readHumidity();
-    // currTimeObject.currentTime.seconds = 
-    // currTimeObject.currentTime.timeBase 
-    // currTimeObject.currentTime.timeContext 
 
-    return currObject;
+    currWeatherObject.currentTime.timeBase = realTimeClockFlag;
+    currWeatherObject.currentTime.timeContext = 0; // PLACEHOLDER 
+
+    return currWeatherObject;
 }
