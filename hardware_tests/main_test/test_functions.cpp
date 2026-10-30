@@ -68,3 +68,41 @@ bool device_ID_test() // Redundant test will not write it for now.
 
 }
 */
+
+bool sensor_reading_test()
+{
+    Serial.println(F("##### SENSOR READING TEST BEGINS #####"));
+
+    weatherEntry weatherObject;
+    bool sensor_test_status = true;
+    bool sensor_status = sensorStartWrap();
+    weatherObject = weatherRead();
+    
+    Serial.print("hPA: ");
+    Serial.println(weatherObject.hPa / PASCAL_PER_DECI_HPA);
+    Serial.print("Temperature: ");
+    Serial.println(weatherObject.tempCelsius / TEMP_UNITS_PER_ONE_CELSIUS);
+    // Serial.print("Humidity: ");
+    // Serial.println(weatherObject.humidity); PLACEHOLDER TILL I GET A BME 280 
+    Serial.print("Current time: ");
+    Serial.println(weatherObject.currentTime.seconds); // Wont show time till I get a battery
+
+    if(weatherObject.hPa < MIN_HPA || weatherObject.hPa > MAX_HPA)
+    {
+        Serial.println(F("FAILED: hPa values are out of range."));
+        sensor_test_status = false;
+    }
+
+    if(weatherObject.tempCelsius < MIN_TEMP || weatherObject.tempCelsius > MAX_TEMP)
+    {
+        Serial.println(F("FAILED: temperature values are out of range."));
+        sensor_test_status = false;
+    }
+
+    if((sensor_test_status && sensor_status) == true)
+    {
+        Serial.println(F("##### SENSOR READING TEST PASSED ######"));
+    }
+
+    return (sensor_test_status && sensor_status);
+}

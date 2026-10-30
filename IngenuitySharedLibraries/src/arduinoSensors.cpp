@@ -4,7 +4,8 @@
 
 #include "arduinoSensors.h"
 
-static Adafruit_BME280 weatherSensor; 
+// static Adafruit_BME280 weatherSensor; 
+static Adafruit_BMP280 weatherSensor; 
 static DS3231 realTimeClock; 
 static bool realTimeClockFlag = false;
 
@@ -13,11 +14,11 @@ bool weatherSensorStart()
     if(!weatherSensor.begin(BME280_I2C_ADDRESS)) return false; 
     // Future error handling of sensor not working?
 
-    weatherSensor.setSampling(Adafruit_BME280::MODE_FORCED, // Takes temperature reading only when called
-                              Adafruit_BME280::SAMPLING_X1, // Temperature reading
-                              Adafruit_BME280::SAMPLING_X1, // Pressure reading
-                              Adafruit_BME280::SAMPLING_X1, // Humidity reading
-                              Adafruit_BME280::FILTER_OFF); // Turns filter off, because it's not relevant in this type of reading
+    weatherSensor.setSampling(Adafruit_BMP280::MODE_FORCED, // Takes temperature reading only when called
+                              Adafruit_BMP280::SAMPLING_X1, // Temperature reading
+                              Adafruit_BMP280::SAMPLING_X1, // Pressure reading
+                              // Adafruit_BMP280::SAMPLING_X1, // Humidity reading
+                              Adafruit_BMP280::FILTER_OFF); // Turns filter off, because it's not relevant in this type of reading
     return true;
 }
 
@@ -39,6 +40,15 @@ bool sensorStartWrap()
     bool bme280_sensor = weatherSensorStart();
     bool ds3231_rtc = timeClockStart();
 
+    if(bme280_sensor == false)
+    {
+        Serial.println(F("FAILED: weather sensor didn't start."));
+    }
+    if(ds3231_rtc == false)
+    {
+        Serial.println(F("FAILED: RTC failed, using arduino millis instead."));
+    }
+
     return bme280_sensor && ds3231_rtc;
 }
 
@@ -59,7 +69,7 @@ weatherEntry weatherRead()
 
     currWeatherObject.hPa = weatherSensor.readPressure() / PASCAL_PER_DECI_HPA;
     currWeatherObject.tempCelsius = weatherSensor.readTemperature() * TEMP_UNITS_PER_ONE_CELSIUS;
-    currWeatherObject.humidity = weatherSensor.readHumidity();
+    // currWeatherObject.humidity = weatherSensor.readHumidity();
 
     currWeatherObject.currentTime.timeBase = realTimeClockFlag;
     currWeatherObject.currentTime.timeContext = 0; // PLACEHOLDER 

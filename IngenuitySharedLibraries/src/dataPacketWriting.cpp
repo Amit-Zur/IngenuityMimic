@@ -1,3 +1,4 @@
+/*
 #include "dataPacketWriting.h"
 
 bool memoryCardInit(SdSpiCard& memoryCard)
@@ -34,3 +35,4 @@ bool encodeCardSector(uint8_t* sectorBuffer,uint32_t currSectorNum, const uint8_
 
     return true;
 }
+    */

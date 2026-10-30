@@ -1,6 +1,6 @@
 #pragma once // Include guard for this header file 
-#include <cstdint>
-#include <Adafruit_BME320_Library.h>
+#include <stdint.h>
+#include <Adafruit_BMP280.h> // change to BME280 later
 #include <DS3231.h>
 #include <Wire.h>
 

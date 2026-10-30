@@ -26,9 +26,10 @@ void setup()
 
 
     Serial.println();
-    Serial.println(F("########## BOARD IS READY FOR TESTING ##########"));
-    Serial.println(F("################################################"));
-    Serial.println(F("##########   I2C BUS TEST - PRESS 1   ##########"));
+    Serial.println(F("##########   BOARD IS READY FOR TESTING    ##########"));
+    Serial.println(F("#####################################################"));
+    Serial.println(F("##########      I2C BUS TEST - PRESS 1     ##########"));
+    Serial.println(F("##########  SENSOR READING TEST - PRESS 2  ##########"));    
     Serial.println();
 }
 
@@ -38,5 +39,6 @@ void loop()
     switch(Serial.read())
     {
         case '1': I2C_bus_test(); break;
+        case '2': sensor_reading_test(); break;
     }
 }

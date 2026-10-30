@@ -1,6 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include <Wire.h>
+#include "arduinoSensors.h"
 
 
 struct board_component
@@ -22,9 +23,11 @@ const board_component CONNECTED_DEVICES[] = // Note to self, allocate memory
 
 const uint16_t BOARD_BAUD_RATE = 9600;
 const uint8_t DS3231_ADDRESS = 0x68;
-const uint8_t BMP280_ADDRESS = 0x76;
 const uint8_t DEVICE_AMOUNT = sizeof(CONNECTED_DEVICES) / sizeof(CONNECTED_DEVICES[0]);
-
+const uint16_t MIN_HPA = 9000; // PLACEHOLDER VALUE
+const uint16_t MAX_HPA = 12000; // PLACEHOLDER VLAUE
+const int16_t MIN_TEMP = -4000; // PLACEHOLDER VALUE
+const uint16_t MAX_TEMP = 8500; // PLACEHOLDER VALUE
 
 
 /*
@@ -45,3 +48,5 @@ static uint8_t primary_or_secondary_address(board_component& current);
  *  @returns true if everything is connected correctly, else false
 */
 bool I2C_bus_test();
+
+bool sensor_reading_test();
